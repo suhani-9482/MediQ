@@ -1,0 +1,356 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.header__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header__left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header__menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.header__menu-button:hover {
+  background: #f8fafc;
+}
+
+.header__menu-icon {
+  display: flex;
+  flex-direction: column;
+  width: 20px;
+  height: 16px;
+  justify-content: space-between;
+}
+
+.header__menu-icon span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #374151;
+  border-radius: 1px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.header__menu-icon--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.header__menu-icon--open span:nth-child(2) {
+  opacity: 0;
+}
+
+.header__menu-icon--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.header__logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.header__logo-icon {
+  font-size: 1.75rem;
+}
+
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header__user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header__user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.125rem;
+}
+
+.header__user-email {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.header__user-status {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.header__user-menu {
+  position: relative;
+}
+
+.header__user-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.header__user-button:hover {
+  background: #f8fafc;
+}
+
+.header__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.header__dropdown-icon {
+  font-size: 0.75rem;
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+.header__user-button[aria-expanded="true"] .header__dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.header__user-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.header__user-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 240px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 20;
+  animation: dropdownSlide 0.15s ease-out;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header__user-menu-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.header__user-menu-email {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.header__user-menu-uid {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.header__user-menu-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 0.5rem 0;
+}
+
+.header__user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.header__user-menu-item:hover {
+  background: #f8fafc;
+}
+
+.header__user-menu-item:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.header__user-menu-item--danger {
+  color: #ef4444;
+}
+
+.header__user-menu-item--danger:hover {
+  background: #fef2f2;
+}
+
+.header__user-menu-icon {
+  font-size: 1rem;
+  width: 1.25rem;
+  text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .header__container {
+    padding: 0 0.75rem;
+  }
+  
+  .header__user-info {
+    display: none;
+  }
+  
+  .header__logo h1 {
+    font-size: 1.25rem;
+  }
+  
+  .header__user-menu-dropdown {
+    right: -0.5rem;
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header__container {
+    padding: 0 0.5rem;
+  }
+  
+  .header__logo h1 {
+    font-size: 1.125rem;
+  }
+  
+  .header__left {
+    gap: 0.5rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .header {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: #334155;
+  }
+  
+  .header__menu-button:hover {
+    background: #334155;
+  }
+  
+  .header__menu-icon span {
+    background: #f1f5f9;
+  }
+  
+  .header__logo h1 {
+    color: white;
+  }
+  
+  .header__user-button:hover {
+    background: #334155;
+  }
+  
+  .header__user-email {
+    color: #f1f5f9;
+  }
+  
+  .header__user-status {
+    color: #94a3b8;
+  }
+  
+  .header__user-menu-dropdown {
+    background: #1e293b;
+    border-color: #334155;
+  }
+  
+  .header__user-menu-header {
+    border-color: #334155;
+  }
+  
+  .header__user-menu-email {
+    color: #f1f5f9;
+  }
+  
+  .header__user-menu-uid {
+    color: #94a3b8;
+  }
+  
+  .header__user-menu-divider {
+    background: #334155;
+  }
+  
+  .header__user-menu-item {
+    color: #f1f5f9;
+  }
+  
+  .header__user-menu-item:hover {
+    background: #334155;
+  }
+  
+  .header__user-menu-item--danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+  }
+}

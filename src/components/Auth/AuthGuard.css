@@ -1,0 +1,127 @@
+.auth-guard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.auth-guard__loading {
+  text-align: center;
+  color: white;
+}
+
+.auth-guard__loading p {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  opacity: 0.9;
+}
+
+.auth-guard__container {
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-guard__error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  color: #fef2f2;
+  backdrop-filter: blur(10px);
+}
+
+.auth-guard__error-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.auth-guard__error-message {
+  flex: 1;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.auth-guard__error-close {
+  background: none;
+  border: none;
+  color: #fef2f2;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.auth-guard__error-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.auth-guard__footer {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.auth-guard__footer p {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+.auth-guard__link {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.auth-guard__link:hover {
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .auth-guard {
+    padding: 0.5rem;
+  }
+  
+  .auth-guard__error {
+    padding: 0.75rem;
+    font-size: 0.8125rem;
+  }
+  
+  .auth-guard__footer p {
+    font-size: 0.6875rem;
+  }
+}
+
+/* Animation for error messages */
+.auth-guard__error {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus styles for accessibility */
+.auth-guard__error-close:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.auth-guard__link:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}

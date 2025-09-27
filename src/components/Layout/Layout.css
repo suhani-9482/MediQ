@@ -1,0 +1,86 @@
+.layout {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.layout__container {
+  display: flex;
+  position: relative;
+}
+
+.layout__main {
+  flex: 1;
+  min-height: calc(100vh - 64px); /* Account for header height */
+  margin-top: 64px; /* Header height */
+  transition: margin-left 0.3s ease;
+}
+
+.layout__main--with-sidebar {
+  margin-left: 280px; /* Sidebar width */
+}
+
+.layout__content {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .layout__main--with-sidebar {
+    margin-left: 0; /* No sidebar margin on mobile */
+  }
+  
+  .layout__content {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .layout__main--with-sidebar {
+    margin-left: 260px; /* Adjust for tablet sidebar width */
+  }
+}
+
+/* For collapsed sidebar on large screens */
+@media (min-width: 1025px) {
+  .layout__main:not(.layout__main--with-sidebar) {
+    margin-left: 64px; /* Collapsed sidebar width */
+  }
+}
+
+/* Content area styling */
+.layout__content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure proper spacing and scrolling */
+.layout__main {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Print styles */
+@media print {
+  .layout__main {
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  .layout__content {
+    padding: 0;
+    max-width: none;
+  }
+}
