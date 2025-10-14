@@ -112,8 +112,8 @@ const Dashboard = () => {
             <span className="dashboard__tech-status">✅ Active</span>
           </div>
           <div className="dashboard__tech-item">
-            <span className="dashboard__tech-icon">🔥</span>
-            <span className="dashboard__tech-name">Firebase</span>
+            <span className="dashboard__tech-icon">🧰</span>
+            <span className="dashboard__tech-name">Supabase</span>
             <span className="dashboard__tech-status">✅ Connected</span>
           </div>
           <div className="dashboard__tech-item">
@@ -141,7 +141,7 @@ const Dashboard = () => {
           </div>
           <div className="dashboard__criteria-item dashboard__criteria-item--completed">
             <span className="dashboard__criteria-icon">✅</span>
-            <span>Firebase properly configured</span>
+            <span>Supabase properly configured</span>
           </div>
         </div>
       </div>
