@@ -1,6 +1,6 @@
 .layout {
   min-height: 100vh;
-  background: #f8fafc;
+  background: #f1f5f9;
 }
 
 .layout__container {
@@ -12,16 +12,17 @@
   flex: 1;
   min-height: calc(100vh - 64px); /* Account for header height */
   margin-top: 64px; /* Header height */
+  margin-left: 64px; /* Collapsed sidebar width */
   transition: margin-left 0.3s ease;
 }
 
 .layout__main--with-sidebar {
-  margin-left: 280px; /* Sidebar width */
+  margin-left: 64px; /* Always use collapsed sidebar width */
 }
 
 .layout__content {
-  padding: 2rem;
-  max-width: 1200px;
+  padding: 0;
+  max-width: 100%;
   margin: 0 auto;
   width: 100%;
 }
@@ -33,20 +34,13 @@
   }
   
   .layout__content {
-    padding: 1rem;
+    padding: 0;
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
-  .layout__main--with-sidebar {
-    margin-left: 260px; /* Adjust for tablet sidebar width */
-  }
-}
-
-/* For collapsed sidebar on large screens */
-@media (min-width: 1025px) {
-  .layout__main:not(.layout__main--with-sidebar) {
-    margin-left: 64px; /* Collapsed sidebar width */
+@media (min-width: 769px) {
+  .layout__main {
+    margin-left: 64px; /* Collapsed sidebar width on desktop */
   }
 }
 

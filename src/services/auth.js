@@ -12,11 +12,15 @@ export const sendMagicLink = async (email) => {
       return { success: false, error: 'Please enter a valid email address' }
     }
 
-    const redirectTo = window.location.origin
-    const { error } = await supabase.auth.signInWithOtp({
+    // Use full URL including protocol
+    const redirectTo = `${window.location.origin}/`
+    console.log('📧 Sending magic link with redirect:', redirectTo)
+    
+    const { data, error } = await supabase.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: redirectTo,
+        shouldCreateUser: true,
       },
     })
 
@@ -25,7 +29,7 @@ export const sendMagicLink = async (email) => {
     }
 
     window.localStorage.setItem('emailForSignIn', email)
-    console.log('✅ Magic link sent to:', email)
+    console.log('✅ Magic link sent to:', email, data)
     return { success: true }
   } catch (error) {
     console.error('❌ Error sending magic link:', error)
@@ -44,19 +48,45 @@ export const sendMagicLink = async (email) => {
  */
 export const completeSignIn = async () => {
   try {
+    console.log('🔍 Checking for authentication callback...')
+    
+    // Check if this is a callback from the magic link
+    const urlParams = new URLSearchParams(window.location.search)
+    const hashParams = new URLSearchParams(window.location.hash.substring(1))
+    
+    const hasAuthParams = urlParams.has('token_hash') || 
+                         urlParams.has('type') || 
+                         hashParams.has('access_token') ||
+                         hashParams.has('refresh_token')
+    
+    if (hasAuthParams) {
+      console.log('🔗 Auth callback detected in URL')
+      // Give Supabase a moment to process the URL tokens
+      await new Promise(resolve => setTimeout(resolve, 500))
+    }
+    
     // Supabase handles session from URL automatically when detectSessionInUrl is true.
     const { data, error } = await supabase.auth.getUser()
+    
     if (error) {
-      // If there is an auth error propagated via URL, surface it
+      console.error('❌ Auth error:', error)
+      // Treat missing session on initial load as a benign state
+      if (error.message === 'Auth session missing' || error.message === 'Auth session missing!') {
+        return { success: false, error: 'Invalid sign-in link' }
+      }
+      // If there is another auth error propagated via URL, surface it
       return { success: false, error: error.message }
     }
 
     if (data?.user) {
       const user = data.user
+      console.log('✅ User authenticated successfully:', user.email)
+      
       // Clean up URL if it contains tokens or params
       if (window.location.search || window.location.hash) {
         window.history.replaceState({}, document.title, window.location.pathname)
       }
+      
       return { success: true, user }
     }
 
