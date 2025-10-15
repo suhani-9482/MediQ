@@ -1,0 +1,235 @@
+.file-upload {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.file-upload__input {
+  display: none;
+}
+
+.file-upload__dropzone {
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.file-upload__dropzone:hover {
+  border-color: #4682B4;
+  background: rgba(70, 130, 180, 0.02);
+}
+
+.file-upload__dropzone--dragging {
+  border-color: #4682B4;
+  background: rgba(70, 130, 180, 0.1);
+  transform: scale(1.02);
+}
+
+.file-upload__icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.file-upload__dropzone h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload__dropzone p {
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+.file-upload__hint {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* Preview */
+.file-upload__preview {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid #e2e8f0;
+}
+
+.file-upload__preview-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.file-upload__preview-icon {
+  font-size: 3rem;
+  flex-shrink: 0;
+}
+
+.file-upload__preview-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-upload__preview-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+}
+
+.file-upload__preview-size {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Progress */
+.file-upload__progress {
+  margin-bottom: 1.5rem;
+}
+
+.file-upload__progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4682B4 0%, #2980B9 100%);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.file-upload__progress-text {
+  font-size: 0.875rem;
+  color: #64748b;
+  text-align: center;
+}
+
+/* Actions */
+.file-upload__actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.file-upload__button {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.file-upload__button--upload {
+  background: linear-gradient(135deg, #4682B4 0%, #2980B9 100%);
+  color: white;
+}
+
+.file-upload__button--upload:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(70, 130, 180, 0.3);
+}
+
+.file-upload__button--cancel {
+  background: #f8fafc;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.file-upload__button--cancel:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.file-upload__button--uploading {
+  background: #94a3b8;
+  color: white;
+  cursor: not-allowed;
+}
+
+.file-upload__button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.file-upload__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .file-upload__dropzone {
+    padding: 2rem 1.5rem;
+  }
+
+  .file-upload__icon {
+    font-size: 3rem;
+  }
+
+  .file-upload__dropzone h3 {
+    font-size: 1.125rem;
+  }
+
+  .file-upload__preview {
+    padding: 1.5rem;
+  }
+
+  .file-upload__actions {
+    flex-direction: column;
+  }
+
+  .file-upload__button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .file-upload__dropzone {
+    padding: 1.5rem 1rem;
+  }
+
+  .file-upload__icon {
+    font-size: 2.5rem;
+  }
+
+  .file-upload__preview-header {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+

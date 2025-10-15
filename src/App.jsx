@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import AuthGuard from '@components/Auth/AuthGuard.jsx'
 import Layout from '@components/Layout/Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import MedicalRecords from './pages/MedicalRecords.jsx'
 import './App.css'
 
 function App() {
@@ -14,9 +15,11 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Navigate to="/" replace />} />
             
+            {/* Medical Records - Stage 2 */}
+            <Route path="/records" element={<MedicalRecords />} />
+            <Route path="/records/*" element={<Navigate to="/records" replace />} />
+            
             {/* Placeholder routes for future stages */}
-            <Route path="/records" element={<ComingSoonPage title="Medical Records" stage="2" />} />
-            <Route path="/records/*" element={<ComingSoonPage title="Medical Records" stage="2" />} />
             <Route path="/reminders" element={<ComingSoonPage title="Reminders" stage="6" />} />
             <Route path="/emergency" element={<ComingSoonPage title="Emergency SOS" stage="7" />} />
             <Route path="/blockchain" element={<ComingSoonPage title="Blockchain" stage="5" />} />

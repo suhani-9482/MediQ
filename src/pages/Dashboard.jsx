@@ -1,8 +1,31 @@
 import { useAuth } from '@hooks/useAuth.js'
+import { useNavigate } from 'react-router-dom'
+import { useFileStats } from '@hooks/useFileStats.js'
+import { useEffect } from 'react'
 import './Dashboard.css'
 
 const Dashboard = () => {
   const { user } = useAuth()
+  const navigate = useNavigate()
+  const { totalRecords, loading, refreshStats } = useFileStats()
+
+  // Refresh stats when component mounts or becomes visible
+  useEffect(() => {
+    refreshStats()
+
+    // Refresh stats when window regains focus (user returns to tab)
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        refreshStats()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [refreshStats])
 
   return (
     <div className="dashboard">
@@ -16,7 +39,9 @@ const Dashboard = () => {
           <div className="dashboard__stat-icon">📋</div>
           <div className="dashboard__stat-content">
             <h3>Total Records</h3>
-            <p className="dashboard__stat-value">0</p>
+            <p className="dashboard__stat-value">
+              {loading ? '...' : totalRecords}
+            </p>
           </div>
         </div>
 
@@ -49,7 +74,11 @@ const Dashboard = () => {
         <div className="dashboard__quick-actions">
           <h2>Quick Actions</h2>
           <div className="dashboard__action-list">
-            <button className="dashboard__action-btn">
+            <button 
+              className="dashboard__action-btn"
+              onClick={() => navigate('/records')}
+              aria-label="Upload Medical Record"
+            >
               <span className="dashboard__action-icon">📤</span>
               <span>Upload Record</span>
             </button>

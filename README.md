@@ -2,20 +2,34 @@
 
 A secure, decentralized medical records management system built with React, Firebase, and blockchain technology.
 
-## 🎯 Current Status: Stage 1 Complete ✅
+## 🎯 Current Status: Stage 3 Complete ✅
 
-**Stage 1 - Authentication & Foundation**
+**Stage 1 - Authentication & Foundation** ✅
 - ✅ Email-link (passwordless) authentication
 - ✅ Responsive layout with header and sidebar
-- ✅ Firebase integration (Auth, Firestore, Storage)
+- ✅ Supabase integration (Auth, Storage)
 - ✅ Modern UI with React 18 + Vite
 - ✅ Mobile-first responsive design
+
+**Stage 2 - File Upload & Storage** ✅
+- ✅ Drag & drop file upload component
+- ✅ Supabase Storage integration
+- ✅ File type validation (PDF, images)
+- ✅ Upload progress indicators
+- ✅ Security rules implementation
+
+**Stage 3 - OCR & Text Extraction** ✅
+- ✅ Client-side OCR for images (Tesseract.js)
+- ✅ PDF text extraction (PDF.js)
+- ✅ Date detection algorithms
+- ✅ Basic keyword extraction
+- ✅ Text search functionality
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
-- Firebase account
+- Supabase account
 
 ### Installation
 
@@ -24,17 +38,18 @@ A secure, decentralized medical records management system built with React, Fire
    npm install
    ```
 
-2. **Set up Firebase:**
-   - Go to [Firebase Console](https://console.firebase.google.com/)
+2. **Set up Supabase:**
+   - Go to [Supabase Dashboard](https://app.supabase.com/)
    - Create a new project
-   - Enable Authentication → Sign-in method → Email link (passwordless)
-   - Add your domain to authorized domains (localhost for development)
-   - Copy your Firebase config
+   - Enable Authentication → Email (Magic Link)
+   - Copy your project URL and anon key
+   - **Important**: Follow `DATABASE_SETUP.md` to configure the database
 
 3. **Configure environment:**
    ```bash
-   cp env.example .env
-   # Edit .env with your Firebase configuration
+   # Create .env file with:
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
 
 4. **Start development server:**
@@ -67,17 +82,19 @@ mediq/
 
 ## 📋 Development Roadmap
 
-### **Stage 2 - File Upload & Storage** (Next)
-- Drag & drop file upload
-- Firebase Storage integration
-- File metadata tracking
-- Security rules
+### **Stage 2 - File Upload & Storage** ✅ Complete
+- ✅ Drag & drop file upload
+- ✅ Supabase Storage integration
+- ✅ File metadata tracking
+- ✅ Security rules
 
-### **Stage 3 - OCR & Text Extraction**
-- Client-side OCR (Tesseract.js)
-- PDF text extraction (PDF.js)
-- Date detection algorithms
-- Search functionality
+### **Stage 3 - OCR & Text Extraction** ✅ Complete
+- ✅ Client-side OCR (Tesseract.js)
+- ✅ PDF text extraction (PDF.js)
+- ✅ Date detection algorithms
+- ✅ Keyword extraction
+- ✅ Document type classification
+- ✅ Search functionality
 
 ### **Stage 4 - IPFS Integration**
 - Web3.Storage integration
@@ -122,10 +139,13 @@ mediq/
 ## 🎨 Tech Stack
 
 - **Frontend**: React 18, Vite, CSS3
-- **Authentication**: Firebase Auth (Email Link)
-- **Database**: Cloud Firestore
-- **Storage**: Firebase Storage
-- **Future**: IPFS, Ethereum, Tesseract.js, PDF.js
+- **Authentication**: Supabase Auth (Magic Link)
+- **Database**: Supabase PostgreSQL
+- **Storage**: Supabase Storage
+- **OCR**: Tesseract.js (client-side)
+- **PDF Processing**: PDF.js
+- **Text Analysis**: Custom algorithms (date detection, keyword extraction)
+- **Future**: IPFS, Ethereum
 
 ## 📱 Browser Support
 
@@ -155,6 +175,22 @@ For issues and questions:
 - ✅ Sign in via email link
 - ✅ See UID on dashboard
 - ✅ Responsive layout works on mobile/desktop
-- ✅ Firebase properly configured
+- ✅ Supabase properly configured
 
-Ready for Stage 2! 🚀
+**Stage 2 Acceptance Criteria Met:**
+- ✅ Drag & drop file upload working
+- ✅ File validation (PDF, images, 50MB limit)
+- ✅ Upload progress indicator
+- ✅ Files stored securely in Supabase Storage
+- ✅ User-specific access control
+
+**Stage 3 Acceptance Criteria Met:**
+- ✅ OCR extracts text from images
+- ✅ PDF text extraction working
+- ✅ Dates automatically detected
+- ✅ Keywords extracted and displayed
+- ✅ Document type classification
+- ✅ Search functionality across all documents
+- ✅ Metadata displayed on file cards
+
+Ready for Stage 4! 🚀
