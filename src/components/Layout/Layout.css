@@ -1,6 +1,7 @@
 .layout {
   min-height: 100vh;
-  background: #f1f5f9;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
 }
 
 .layout__container {
@@ -10,14 +11,14 @@
 
 .layout__main {
   flex: 1;
-  min-height: calc(100vh - 64px); /* Account for header height */
-  margin-top: 64px; /* Header height */
-  margin-left: 64px; /* Collapsed sidebar width */
-  transition: margin-left 0.3s ease;
+  min-height: calc(100vh - 72px); /* Account for header height */
+  margin-top: 72px; /* Header height */
+  margin-left: 80px; /* Collapsed sidebar width */
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .layout__main--with-sidebar {
-  margin-left: 64px; /* Always use collapsed sidebar width */
+  margin-left: 80px; /* Always use collapsed sidebar width */
 }
 
 .layout__content {
@@ -25,10 +26,27 @@
   max-width: 100%;
   margin: 0 auto;
   width: 100%;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .layout__main {
+    margin-top: 64px; /* Mobile header height */
+    min-height: calc(100vh - 64px);
+  }
+
   .layout__main--with-sidebar {
     margin-left: 0; /* No sidebar margin on mobile */
   }
@@ -40,23 +58,7 @@
 
 @media (min-width: 769px) {
   .layout__main {
-    margin-left: 64px; /* Collapsed sidebar width on desktop */
-  }
-}
-
-/* Content area styling */
-.layout__content {
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    margin-left: 80px; /* Collapsed sidebar width on desktop */
   }
 }
 
@@ -68,6 +70,10 @@
 
 /* Print styles */
 @media print {
+  .layout {
+    background: white;
+  }
+
   .layout__main {
     margin-left: 0 !important;
     margin-top: 0 !important;

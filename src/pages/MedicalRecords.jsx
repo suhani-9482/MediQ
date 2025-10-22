@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '@hooks/useAuth.js'
 import FileUpload from '../components/FileUpload/FileUpload.jsx'
 import SearchBar from '../components/Search/SearchBar.jsx'
+import IPFSBackupButton from '../components/IPFS/IPFSBackupButton.jsx'
+import IPFSStatusBadge from '../components/IPFS/IPFSStatusBadge.jsx'
 import { listUserFiles, getFileUrl, deleteFile, formatFileSize, getFileIcon } from '@services/storage.js'
-import { getFileMetadata, searchFileMetadata, deleteFileMetadata } from '@services/metadata.js'
+import { getFileMetadata, searchFileMetadata, deleteFileMetadata, getIPFSStats, getFilesNotBackedUp } from '@services/metadata.js'
+import { getIPFSUrls } from '@services/ipfs.js'
 import './MedicalRecords.css'
 
 const MedicalRecords = () => {
@@ -15,6 +18,8 @@ const MedicalRecords = () => {
   const [success, setSuccess] = useState(null)
   const [showUpload, setShowUpload] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [ipfsStats, setIpfsStats] = useState(null)
+  const [showIPFSInfo, setShowIPFSInfo] = useState(false)
 
   useEffect(() => {
     if (user?.uid) {
@@ -27,10 +32,11 @@ const MedicalRecords = () => {
 
     setLoading(true)
     
-    // Load files and metadata
-    const [filesResult, metadataResult] = await Promise.all([
+    // Load files, metadata, and IPFS stats
+    const [filesResult, metadataResult, ipfsStatsResult] = await Promise.all([
       listUserFiles(user.uid),
-      getFileMetadata(user.uid)
+      getFileMetadata(user.uid),
+      getIPFSStats(user.uid)
     ])
     
     if (filesResult.success) {
@@ -42,6 +48,10 @@ const MedicalRecords = () => {
 
     if (metadataResult.success) {
       setMetadata(metadataResult.data)
+    }
+    
+    if (ipfsStatsResult.success) {
+      setIpfsStats(ipfsStatsResult.stats)
     }
     
     setLoading(false)
@@ -112,6 +122,40 @@ const MedicalRecords = () => {
   const getMetadataForFile = (fileName) => {
     return metadata.find(m => m.file_name === fileName)
   }
+  
+  // Handle IPFS backup completion
+  const handleIPFSBackupComplete = (updatedFile) => {
+    setSuccess('File backed up to IPFS successfully!')
+    loadFiles()
+    setTimeout(() => setSuccess(null), 3000)
+  }
+  
+  // Handle IPFS backup error
+  const handleIPFSBackupError = (errorMsg) => {
+    setError(`IPFS Backup failed: ${errorMsg}`)
+    setTimeout(() => setError(null), 5000)
+  }
+  
+  // Handle batch backup to IPFS
+  const handleBatchBackup = async () => {
+    const notBackedUpResult = await getFilesNotBackedUp(user.uid)
+    
+    if (!notBackedUpResult.success) {
+      setError('Failed to check backup status')
+      return
+    }
+    
+    const notBackedUp = notBackedUpResult.data
+    
+    if (notBackedUp.length === 0) {
+      setSuccess('All files are already backed up to IPFS!')
+      setTimeout(() => setSuccess(null), 3000)
+      return
+    }
+    
+    setSuccess(`${notBackedUp.length} file(s) need backup. Use the backup button on each file.`)
+    setTimeout(() => setSuccess(null), 5000)
+  }
 
   return (
     <div className="medical-records">
@@ -119,13 +163,36 @@ const MedicalRecords = () => {
         <div>
           <h1>Medical Records</h1>
           <p>Upload and manage your medical documents securely</p>
+          {ipfsStats && (
+            <div className="medical-records__ipfs-stats">
+              <span className="ipfs-stat">
+                ☁️ IPFS Backups: {ipfsStats.backed_up}/{ipfsStats.total}
+              </span>
+              {ipfsStats.failed > 0 && (
+                <span className="ipfs-stat ipfs-stat--failed">
+                  ❌ {ipfsStats.failed} failed
+                </span>
+              )}
+            </div>
+          )}
         </div>
-        <button
-          onClick={() => setShowUpload(!showUpload)}
-          className="medical-records__upload-btn"
-        >
-          {showUpload ? '✕ Close' : '📤 Upload New'}
-        </button>
+        <div className="medical-records__header-actions">
+          {ipfsStats && ipfsStats.none > 0 && (
+            <button
+              onClick={handleBatchBackup}
+              className="medical-records__ipfs-btn"
+              title="Check which files need IPFS backup"
+            >
+              ☁️ Backup Status
+            </button>
+          )}
+          <button
+            onClick={() => setShowUpload(!showUpload)}
+            className="medical-records__upload-btn"
+          >
+            {showUpload ? '✕ Close' : '📤 Upload New'}
+          </button>
+        </div>
       </div>
 
       {error && (
@@ -229,6 +296,31 @@ const MedicalRecords = () => {
                             </span>
                           </div>
                         )}
+                      </div>
+                    )}
+                    
+                    {/* IPFS Status Badge */}
+                    {fileMetadata && (
+                      <div className="medical-records__card-ipfs">
+                        <IPFSStatusBadge 
+                          file={fileMetadata}
+                          showCID={true}
+                          onViewIPFS={(file) => {
+                            const urls = getIPFSUrls(file.ipfs_cid, file.file_name)
+                            window.open(urls.primary, '_blank', 'noopener,noreferrer')
+                          }}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* IPFS Backup Button */}
+                    {fileMetadata && fileMetadata.ipfs_backup_status !== 'completed' && (
+                      <div className="medical-records__card-ipfs-action">
+                        <IPFSBackupButton 
+                          file={fileMetadata}
+                          onBackupComplete={handleIPFSBackupComplete}
+                          onBackupError={handleIPFSBackupError}
+                        />
                       </div>
                     )}
                   </div>

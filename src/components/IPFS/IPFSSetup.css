@@ -1,0 +1,339 @@
+.ipfs-setup {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl, 1.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ipfs-setup__icon {
+  font-size: 4rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.ipfs-setup__success-icon {
+  font-size: 5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.ipfs-setup h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ipfs-setup h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.75rem;
+}
+
+.ipfs-setup__description {
+  text-align: center;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Form */
+.ipfs-setup__form {
+  margin: 2rem 0;
+}
+
+.ipfs-setup__field {
+  margin-bottom: 1.5rem;
+}
+
+.ipfs-setup__field label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.5rem;
+}
+
+.ipfs-setup__input {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius, 0.5rem);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.ipfs-setup__input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.ipfs-setup__input:disabled {
+  background: #f1f5f9;
+  cursor: not-allowed;
+}
+
+.ipfs-setup__hint {
+  display: block;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 0.375rem;
+  font-style: italic;
+}
+
+/* Error */
+.ipfs-setup__error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.125rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid #ef4444;
+  border-radius: var(--radius, 0.5rem);
+  color: #ef4444;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.ipfs-setup__error-icon {
+  font-size: 1.25rem;
+}
+
+/* Buttons */
+.ipfs-setup__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-lg, 1rem);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.ipfs-setup__btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.ipfs-setup__btn:hover::before {
+  left: 100%;
+}
+
+.ipfs-setup__btn--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+}
+
+.ipfs-setup__btn--primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-xl, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
+}
+
+.ipfs-setup__btn--primary:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.ipfs-setup__btn--secondary {
+  background: rgba(0, 0, 0, 0.05);
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+}
+
+.ipfs-setup__btn--secondary:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+.ipfs-setup__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.ipfs-setup__btn-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Instructions */
+.ipfs-setup__instructions {
+  background: rgba(102, 126, 234, 0.05);
+  padding: 1.5rem;
+  border-radius: var(--radius, 0.5rem);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  margin: 1.5rem 0;
+}
+
+.ipfs-setup__instructions ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #475569;
+  line-height: 1.8;
+}
+
+.ipfs-setup__instructions li {
+  margin-bottom: 0.5rem;
+}
+
+/* Info section */
+.ipfs-setup__info {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.ipfs-setup__info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ipfs-setup__info li {
+  padding: 0.625rem 0;
+  color: #64748b;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+/* Checking state */
+.ipfs-setup--checking {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.ipfs-setup__spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  border-top-color: #667eea;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+/* Configured state */
+.ipfs-setup--configured {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.ipfs-setup--configured p {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+}
+
+/* Email sent state */
+.ipfs-setup--email-sent {
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ipfs-setup {
+    padding: 2rem 1.5rem;
+  }
+  
+  .ipfs-setup__icon {
+    font-size: 3.5rem;
+  }
+  
+  .ipfs-setup h3 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ipfs-setup {
+    padding: 1.5rem 1.25rem;
+  }
+  
+  .ipfs-setup__icon {
+    font-size: 3rem;
+  }
+  
+  .ipfs-setup h3 {
+    font-size: 1.25rem;
+  }
+  
+  .ipfs-setup__btn {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+}
+

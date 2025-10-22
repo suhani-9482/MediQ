@@ -1,6 +1,7 @@
 import { extractTextFromImage, isImageFile } from './ocr.js'
 import { extractTextFromPDF, isPDFFile } from './pdfExtractor.js'
 import { analyzeText } from './textAnalysis.js'
+import { autoPreprocess, preprocessImage } from './imagePreprocessor.js'
 
 /**
  * Process a document file (extract text and analyze)
@@ -22,8 +23,32 @@ export const processDocument = async (file, onProgress = null) => {
     // Extract text based on file type
     if (isImageFile(file.type)) {
       processingMethod = 'ocr'
-      extractionResult = await extractTextFromImage(file, (progress) => {
-        if (onProgress) onProgress({ stage: 'extracting', progress })
+      
+      // Step 1: Preprocess image for better OCR accuracy
+      if (onProgress) onProgress({ stage: 'preprocessing', progress: 10 })
+      console.log('🎨 Preprocessing image for better OCR...')
+      
+      let processedFile = file
+      try {
+        // Use auto preprocessing to detect best settings
+        processedFile = await autoPreprocess(file)
+        console.log('✅ Image preprocessing complete')
+      } catch (preprocessError) {
+        console.warn('⚠️ Preprocessing failed, using original image:', preprocessError.message)
+        processedFile = file
+      }
+      
+      // Step 2: Extract text with enhanced OCR settings
+      if (onProgress) onProgress({ stage: 'extracting', progress: 20 })
+      extractionResult = await extractTextFromImage(processedFile, {
+        languages: ['eng'],
+        psm: 3, // Automatic page segmentation
+        oem: 3, // Default OCR engine
+        onProgress: (progress) => {
+          // Map progress from 20-90%
+          const mappedProgress = 20 + (progress * 0.7)
+          if (onProgress) onProgress({ stage: 'extracting', progress: Math.round(mappedProgress) })
+        }
       })
       extractedText = extractionResult.text || ''
     } else if (isPDFFile(file.type)) {

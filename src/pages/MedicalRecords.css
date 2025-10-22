@@ -2,55 +2,149 @@
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .medical-records__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 2rem;
-  gap: 1rem;
+  margin-bottom: 2.5rem;
+  gap: 1.5rem;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl, 1.5rem);
+  box-shadow: var(--shadow-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .medical-records__header h1 {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .medical-records__header p {
   font-size: 1.125rem;
   color: #64748b;
+  margin-bottom: 0.75rem;
 }
 
-.medical-records__upload-btn {
+.medical-records__header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* IPFS Stats in Header */
+.medical-records__ipfs-stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.ipfs-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  background: rgba(102, 126, 234, 0.1);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  border-radius: var(--radius, 0.5rem);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.ipfs-stat--failed {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.medical-records__ipfs-btn {
   padding: 0.875rem 1.5rem;
-  background: linear-gradient(135deg, #4682B4 0%, #2980B9 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 500;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: var(--radius-lg, 1rem);
+  font-size: 0.9375rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
 }
 
-.medical-records__upload-btn:hover {
+.medical-records__ipfs-btn:hover {
+  background: #667eea;
+  color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(70, 130, 180, 0.3);
+  box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+}
+
+.medical-records__upload-btn {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg, 1rem);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+  position: relative;
+  overflow: hidden;
+}
+
+.medical-records__upload-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.medical-records__upload-btn:hover::before {
+  left: 100%;
+}
+
+.medical-records__upload-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
 }
 
 /* Alerts */
 .medical-records__alert {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
+  gap: 1rem;
+  padding: 1.25rem 1.75rem;
+  border-radius: var(--radius-lg, 1rem);
   margin-bottom: 1.5rem;
   animation: slideDown 0.3s ease;
+  box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
 }
 
 @keyframes slideDown {
@@ -65,19 +159,21 @@
 }
 
 .medical-records__alert--error {
-  background: #fee2e2;
-  border: 1px solid #fecaca;
+  background: rgba(254, 226, 226, 0.95);
+  backdrop-filter: blur(10px);
+  border: 2px solid #fecaca;
   color: #991b1b;
 }
 
 .medical-records__alert--success {
-  background: #d1fae5;
-  border: 1px solid #a7f3d0;
+  background: rgba(209, 250, 229, 0.95);
+  backdrop-filter: blur(10px);
+  border: 2px solid #a7f3d0;
   color: #065f46;
 }
 
 .medical-records__alert-icon {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   flex-shrink: 0;
 }
 
@@ -85,24 +181,29 @@
   margin-left: auto;
   background: none;
   border: none;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   cursor: pointer;
   color: inherit;
   opacity: 0.7;
-  transition: opacity 0.2s;
+  transition: all 0.2s;
+  padding: 0.25rem;
+  border-radius: var(--radius-sm, 0.375rem);
 }
 
 .medical-records__alert-close:hover {
   opacity: 1;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 /* Upload Section */
 .medical-records__upload-section {
   margin-bottom: 2.5rem;
-  padding: 2rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl, 1.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
 }
 
 /* Content */
@@ -118,16 +219,21 @@
   justify-content: center;
   min-height: 400px;
   color: #64748b;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl, 1.5rem);
+  padding: 3rem;
 }
 
 .medical-records__spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid #e2e8f0;
+  width: 56px;
+  height: 56px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-top-color: #4682B4;
+  border-top-color: #667eea;
+  border-right-color: #764ba2;
   animation: spin 0.8s linear infinite;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 @keyframes spin {
@@ -145,89 +251,134 @@
   min-height: 400px;
   text-align: center;
   padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl, 1.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
 }
 
 .medical-records__empty-icon {
-  font-size: 5rem;
+  font-size: 6rem;
   margin-bottom: 1.5rem;
-  opacity: 0.5;
+  opacity: 0.6;
+  filter: grayscale(30%);
 }
 
 .medical-records__empty h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: #1e293b;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .medical-records__empty p {
-  font-size: 1rem;
+  font-size: 1.125rem;
   color: #64748b;
   margin-bottom: 2rem;
 }
 
 .medical-records__empty-btn {
-  padding: 0.875rem 2rem;
-  background: linear-gradient(135deg, #4682B4 0%, #2980B9 100%);
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-lg, 1rem);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
 }
 
 .medical-records__empty-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(70, 130, 180, 0.3);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
 }
 
 /* Grid */
 .medical-records__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
+  animation: gridFadeIn 0.5s ease-in;
+}
+
+@keyframes gridFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Card */
 .medical-records__card {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-xl, 1.5rem);
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
+  box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+  position: relative;
+  overflow: hidden;
+}
+
+.medical-records__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
 .medical-records__card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-  border-color: #4682B4;
+  box-shadow: var(--shadow-xl, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
+  transform: translateY(-8px);
+  border-color: #667eea;
+}
+
+.medical-records__card:hover::before {
+  transform: scaleX(1);
 }
 
 .medical-records__card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .medical-records__card-icon {
-  font-size: 3rem;
+  font-size: 3.5rem;
   text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.medical-records__card:hover .medical-records__card-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .medical-records__card-badge {
-  padding: 0.375rem 0.75rem;
-  background: linear-gradient(135deg, #4682B4 0%, #2980B9 100%);
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: var(--radius, 0.5rem);
+  font-size: 0.8125rem;
+  font-weight: 700;
   white-space: nowrap;
+  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .medical-records__card-content {
@@ -235,41 +386,43 @@
 }
 
 .medical-records__card-name {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: 700;
   color: #1e293b;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   word-break: break-word;
+  line-height: 1.4;
 }
 
 .medical-records__card-meta {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  gap: 0.75rem;
+  font-size: 0.9rem;
   color: #64748b;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
 .medical-records__card-details {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #f1f5f9;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(0, 0, 0, 0.05);
 }
 
 .medical-records__card-info {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
-  font-size: 0.875rem;
+  gap: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .medical-records__card-label {
   color: #64748b;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -277,42 +430,64 @@
   color: #1e293b;
   flex: 1;
   word-break: break-word;
+  font-weight: 500;
 }
 
 .medical-records__card-actions {
   display: flex;
-  gap: 0.75rem;
-  padding-top: 1rem;
-  border-top: 1px solid #f1f5f9;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid rgba(0, 0, 0, 0.05);
 }
 
 .medical-records__card-btn {
   flex: 1;
-  padding: 0.625rem;
-  border-radius: 6px;
-  border: 1px solid #e2e8f0;
-  background: white;
-  font-size: 1.25rem;
+  padding: 0.875rem;
+  border-radius: var(--radius-lg, 1rem);
+  border: 2px solid transparent;
+  background: rgba(0, 0, 0, 0.03);
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.medical-records__card-btn--view {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
 }
 
 .medical-records__card-btn--view:hover {
-  background: #4682B4;
-  border-color: #4682B4;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
   transform: scale(1.05);
+  box-shadow: var(--shadow-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+}
+
+.medical-records__card-btn--delete {
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .medical-records__card-btn--delete:hover {
   background: #ef4444;
-  border-color: #ef4444;
+  border-color: #dc2626;
   transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(239, 68, 68, 0.3);
+}
+
+/* IPFS Card Elements */
+.medical-records__card-ipfs {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.medical-records__card-ipfs-action {
+  margin-top: 0.75rem;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
   .medical-records__grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 }
 
@@ -324,10 +499,11 @@
   .medical-records__header {
     flex-direction: column;
     align-items: stretch;
+    padding: 2rem;
   }
 
   .medical-records__header h1 {
-    font-size: 1.75rem;
+    font-size: 2rem;
   }
 
   .medical-records__upload-btn {
@@ -335,20 +511,20 @@
   }
 
   .medical-records__upload-section {
-    padding: 1.5rem;
+    padding: 2rem;
   }
 
   .medical-records__grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .medical-records__empty {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1.5rem;
   }
 
   .medical-records__empty-icon {
-    font-size: 4rem;
+    font-size: 5rem;
   }
 }
 
@@ -357,8 +533,12 @@
     padding: 1rem;
   }
 
+  .medical-records__header {
+    padding: 1.5rem;
+  }
+
   .medical-records__header h1 {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
   }
 
   .medical-records__header p {
@@ -366,11 +546,14 @@
   }
 
   .medical-records__upload-section {
-    padding: 1rem;
+    padding: 1.5rem;
   }
 
   .medical-records__card {
-    padding: 1.25rem;
+    padding: 1.5rem;
+  }
+
+  .medical-records__card-icon {
+    font-size: 3rem;
   }
 }
-

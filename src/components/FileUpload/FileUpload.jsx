@@ -10,7 +10,18 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [processingStatus, setProcessingStatus] = useState('')
   const [selectedFile, setSelectedFile] = useState(null)
+  const [completedStages, setCompletedStages] = useState([])
+  const [currentStage, setCurrentStage] = useState('')
   const fileInputRef = useRef(null)
+
+  // OCR Processing stages
+  const stages = [
+    { id: 'upload', label: 'Upload', icon: '📤', description: 'Uploading file' },
+    { id: 'preprocessing', label: 'Enhance', icon: '🎨', description: 'Enhancing image quality' },
+    { id: 'extracting', label: 'Extract', icon: '🔍', description: 'Extracting text with OCR' },
+    { id: 'analyzing', label: 'Analyze', icon: '🧠', description: 'Analyzing content' },
+    { id: 'saving', label: 'Save', icon: '💾', description: 'Saving metadata' }
+  ]
 
   const handleDragEnter = (e) => {
     e.preventDefault()
@@ -62,6 +73,8 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
     setUploading(true)
     setUploadProgress(0)
     setProcessingStatus('Uploading file...')
+    setCompletedStages([])
+    setCurrentStage('upload')
 
     try {
       // Step 1: Upload file to storage
@@ -73,6 +86,8 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
       }
 
       setUploadProgress(30)
+      setCompletedStages(['upload'])
+      setCurrentStage('preprocessing')
 
       // Step 2: Process document (OCR/PDF extraction)
       let processedData = null
@@ -80,11 +95,29 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
         setProcessingStatus('Extracting text...')
         
         const processingResult = await processDocument(selectedFile, ({ stage, progress }) => {
-          if (stage === 'extracting') {
-            setUploadProgress(30 + (progress * 0.4))
-            setProcessingStatus(`Extracting text... ${progress}%`)
+          if (stage === 'preprocessing') {
+            setCurrentStage('preprocessing')
+            setUploadProgress(30 + (progress * 0.15))
+            setProcessingStatus('Enhancing image quality...')
+            
+            // Mark preprocessing as complete when done
+            if (progress >= 95) {
+              setCompletedStages(prev => [...new Set([...prev, 'preprocessing'])])
+              setCurrentStage('extracting')
+            }
+          } else if (stage === 'extracting') {
+            setCurrentStage('extracting')
+            setUploadProgress(45 + (progress * 0.35))
+            setProcessingStatus(`Extracting text... ${Math.round(progress)}%`)
+            
+            // Mark extracting as complete when done
+            if (progress >= 95) {
+              setCompletedStages(prev => [...new Set([...prev, 'extracting'])])
+              setCurrentStage('analyzing')
+            }
           } else if (stage === 'analyzing') {
-            setUploadProgress(70)
+            setCurrentStage('analyzing')
+            setUploadProgress(80)
             setProcessingStatus('Analyzing content...')
           }
         })
@@ -92,12 +125,14 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
         if (processingResult.success) {
           processedData = processingResult
           setUploadProgress(80)
+          setCompletedStages(prev => [...new Set([...prev, 'analyzing'])])
         }
       } else {
         setUploadProgress(70)
       }
 
       // Step 3: Save metadata to database
+      setCurrentStage('saving')
       setProcessingStatus('Saving metadata...')
       setUploadProgress(90)
 
@@ -118,6 +153,8 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
       await saveFileMetadata(metadata)
 
       setUploadProgress(100)
+      setCompletedStages(prev => [...new Set([...prev, 'saving'])])
+      setCurrentStage('complete')
       setProcessingStatus('Complete!')
 
       // Success
@@ -131,6 +168,8 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
         setUploadProgress(0)
         setUploading(false)
         setProcessingStatus('')
+        setCompletedStages([])
+        setCurrentStage('')
       }, 1500)
 
     } catch (error) {
@@ -139,6 +178,8 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
       setUploading(false)
       setUploadProgress(0)
       setProcessingStatus('')
+      setCompletedStages([])
+      setCurrentStage('')
     }
   }
 
@@ -146,6 +187,8 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
     setSelectedFile(null)
     setUploadProgress(0)
     setUploading(false)
+    setCompletedStages([])
+    setCurrentStage('')
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -197,17 +240,57 @@ const FileUpload = ({ userId, onUploadSuccess, onUploadError }) => {
           </div>
 
           {uploading && (
-            <div className="file-upload__progress">
-              <div className="file-upload__progress-bar">
-                <div
-                  className="file-upload__progress-fill"
-                  style={{ width: `${uploadProgress}%` }}
-                />
+            <>
+              {/* Animated Stage Indicators */}
+              <div className="file-upload__stages">
+                {stages.map((stage, index) => {
+                  const isComplete = completedStages.includes(stage.id)
+                  const isActive = currentStage === stage.id
+                  
+                  return (
+                    <div key={stage.id} className="file-upload__stage-wrapper">
+                      <div 
+                        className={`file-upload__stage ${
+                          isComplete ? 'file-upload__stage--complete' : ''
+                        } ${
+                          isActive ? 'file-upload__stage--active' : ''
+                        }`}
+                      >
+                        <div className="file-upload__stage-icon">
+                          {isComplete ? '✅' : stage.icon}
+                        </div>
+                        <div className="file-upload__stage-label">
+                          {stage.label}
+                        </div>
+                        {isActive && (
+                          <div className="file-upload__stage-description">
+                            {stage.description}
+                          </div>
+                        )}
+                      </div>
+                      {index < stages.length - 1 && (
+                        <div className={`file-upload__stage-connector ${
+                          isComplete ? 'file-upload__stage-connector--complete' : ''
+                        }`}></div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
-              <div className="file-upload__progress-text">
-                {processingStatus || `${uploadProgress}%`}
+
+              {/* Progress Bar */}
+              <div className="file-upload__progress">
+                <div className="file-upload__progress-bar">
+                  <div
+                    className="file-upload__progress-fill"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+                <div className="file-upload__progress-text">
+                  {processingStatus || `${uploadProgress}%`}
+                </div>
               </div>
-            </div>
+            </>
           )}
 
           <div className="file-upload__actions">
