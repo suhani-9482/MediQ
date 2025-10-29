@@ -1,0 +1,252 @@
+.metamask-connect {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.metamask-connect--connected {
+  gap: 1rem;
+}
+
+.metamask-connect__btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-lg, 1rem);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.metamask-connect__btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.metamask-connect__btn:hover::before {
+  left: 100%;
+}
+
+.metamask-connect__btn--connect {
+  background: linear-gradient(135deg, #f6851b 0%, #e2761b 100%);
+  color: white;
+  box-shadow: var(--shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+
+.metamask-connect__btn--connect:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+}
+
+.metamask-connect__btn--address {
+  background: rgba(246, 133, 27, 0.1);
+  color: #e2761b;
+  border: 2px solid #f6851b;
+}
+
+.metamask-connect__btn--address:hover {
+  background: rgba(246, 133, 27, 0.2);
+}
+
+.metamask-connect__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.metamask-connect__logo {
+  width: 20px;
+  height: 20px;
+}
+
+.metamask-connect__logo--small {
+  width: 16px;
+  height: 16px;
+}
+
+.metamask-connect__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.metamask-connect__info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.metamask-connect__network {
+  padding: 0.375rem 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border-radius: var(--radius, 0.5rem);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.metamask-connect__network-warning {
+  padding: 0.375rem 0.75rem;
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-radius: var(--radius, 0.5rem);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.metamask-connect__network-warning:hover {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.metamask-connect__balance {
+  padding: 0.375rem 0.75rem;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border-radius: var(--radius, 0.5rem);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.metamask-connect__dropdown-arrow {
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+  opacity: 0.6;
+}
+
+.metamask-connect__dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  min-width: 280px;
+  background: white;
+  border-radius: var(--radius-lg, 1rem);
+  box-shadow: var(--shadow-xl, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  z-index: 1000;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.metamask-connect__dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.metamask-connect__dropdown-item:last-of-type {
+  border-bottom: none;
+}
+
+.metamask-connect__dropdown-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.metamask-connect__dropdown-value {
+  font-size: 0.875rem;
+  color: #1e293b;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.metamask-connect__dropdown-btn {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius, 0.5rem);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.metamask-connect__dropdown-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+}
+
+.metamask-connect__error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  border-radius: var(--radius, 0.5rem);
+  color: #ef4444;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .metamask-connect__info {
+    display: none;
+  }
+  
+  .metamask-connect__dropdown {
+    left: auto;
+    right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .metamask-connect__btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .metamask-connect__logo {
+    width: 18px;
+    height: 18px;
+  }
+}
+

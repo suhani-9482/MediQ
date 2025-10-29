@@ -4,9 +4,12 @@ import FileUpload from '../components/FileUpload/FileUpload.jsx'
 import SearchBar from '../components/Search/SearchBar.jsx'
 import IPFSBackupButton from '../components/IPFS/IPFSBackupButton.jsx'
 import IPFSStatusBadge from '../components/IPFS/IPFSStatusBadge.jsx'
+import BlockchainAnchorButton from '../components/Blockchain/BlockchainAnchorButton.jsx'
+import BlockchainStatusBadge from '../components/Blockchain/BlockchainStatusBadge.jsx'
 import { listUserFiles, getFileUrl, deleteFile, formatFileSize, getFileIcon } from '@services/storage.js'
-import { getFileMetadata, searchFileMetadata, deleteFileMetadata, getIPFSStats, getFilesNotBackedUp } from '@services/metadata.js'
+import { getFileMetadata, searchFileMetadata, deleteFileMetadata, getIPFSStats, getFilesNotBackedUp, getBlockchainStats, getFilesNotAnchored } from '@services/metadata.js'
 import { getIPFSUrls } from '@services/ipfs.js'
+import { verifyOnBlockchain, getEtherscanUrl } from '@services/blockchain.js'
 import './MedicalRecords.css'
 
 const MedicalRecords = () => {
@@ -20,6 +23,7 @@ const MedicalRecords = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [ipfsStats, setIpfsStats] = useState(null)
   const [showIPFSInfo, setShowIPFSInfo] = useState(false)
+  const [blockchainStats, setBlockchainStats] = useState(null)
 
   useEffect(() => {
     if (user?.uid) {
@@ -32,11 +36,12 @@ const MedicalRecords = () => {
 
     setLoading(true)
     
-    // Load files, metadata, and IPFS stats
-    const [filesResult, metadataResult, ipfsStatsResult] = await Promise.all([
+    // Load files, metadata, IPFS stats, and blockchain stats
+    const [filesResult, metadataResult, ipfsStatsResult, blockchainStatsResult] = await Promise.all([
       listUserFiles(user.uid),
       getFileMetadata(user.uid),
-      getIPFSStats(user.uid)
+      getIPFSStats(user.uid),
+      getBlockchainStats(user.uid)
     ])
     
     if (filesResult.success) {
@@ -52,6 +57,10 @@ const MedicalRecords = () => {
     
     if (ipfsStatsResult.success) {
       setIpfsStats(ipfsStatsResult.stats)
+    }
+    
+    if (blockchainStatsResult.success) {
+      setBlockchainStats(blockchainStatsResult.stats)
     }
     
     setLoading(false)
@@ -156,6 +165,44 @@ const MedicalRecords = () => {
     setSuccess(`${notBackedUp.length} file(s) need backup. Use the backup button on each file.`)
     setTimeout(() => setSuccess(null), 5000)
   }
+  
+  // Handle blockchain anchor completion
+  const handleBlockchainAnchorComplete = (updatedFile) => {
+    setSuccess('Document anchored on blockchain successfully!')
+    loadFiles()
+    setTimeout(() => setSuccess(null), 3000)
+  }
+  
+  // Handle blockchain anchor error
+  const handleBlockchainAnchorError = (errorMsg) => {
+    setError(`Blockchain anchoring failed: ${errorMsg}`)
+    setTimeout(() => setError(null), 5000)
+  }
+  
+  // Handle blockchain verification
+  const handleBlockchainVerify = async (file) => {
+    if (!file.blockchain_hash) {
+      setError('No blockchain hash found for this file')
+      return
+    }
+    
+    const result = await verifyOnBlockchain(file.blockchain_hash)
+    
+    if (result.success) {
+      if (result.data.exists) {
+        setSuccess(`✅ Document verified on blockchain! Block #${result.data.blockNumber}`)
+      } else {
+        setError('Document not found on blockchain')
+      }
+    } else {
+      setError('Verification failed: ' + result.error)
+    }
+    
+    setTimeout(() => {
+      setSuccess(null)
+      setError(null)
+    }, 5000)
+  }
 
   return (
     <div className="medical-records">
@@ -171,6 +218,18 @@ const MedicalRecords = () => {
               {ipfsStats.failed > 0 && (
                 <span className="ipfs-stat ipfs-stat--failed">
                   ❌ {ipfsStats.failed} failed
+                </span>
+              )}
+            </div>
+          )}
+          {blockchainStats && (
+            <div className="medical-records__blockchain-stats">
+              <span className="blockchain-stat">
+                ⛓️ Blockchain: {blockchainStats.anchored}/{blockchainStats.total}
+              </span>
+              {blockchainStats.failed > 0 && (
+                <span className="blockchain-stat blockchain-stat--failed">
+                  ❌ {blockchainStats.failed} failed
                 </span>
               )}
             </div>
@@ -320,6 +379,28 @@ const MedicalRecords = () => {
                           file={fileMetadata}
                           onBackupComplete={handleIPFSBackupComplete}
                           onBackupError={handleIPFSBackupError}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Blockchain Status Badge */}
+                    {fileMetadata && (
+                      <div className="medical-records__card-blockchain">
+                        <BlockchainStatusBadge 
+                          file={fileMetadata}
+                          showDetails={true}
+                          onVerify={handleBlockchainVerify}
+                        />
+                      </div>
+                    )}
+                    
+                    {/* Blockchain Anchor Button */}
+                    {fileMetadata && fileMetadata.blockchain_status !== 'anchored' && (
+                      <div className="medical-records__card-blockchain-action">
+                        <BlockchainAnchorButton 
+                          file={fileMetadata}
+                          onAnchorComplete={handleBlockchainAnchorComplete}
+                          onAnchorError={handleBlockchainAnchorError}
                         />
                       </div>
                     )}

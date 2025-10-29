@@ -12,10 +12,18 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@metamask/sdk": "^0.33.1",
     "@supabase/supabase-js": "^2.75.0",
     "@web3-storage/w3up-client": "^17.3.0",
+    "chart.js": "^4.5.1",
+    "date-fns": "^4.1.0",
+    "ethers": "^6.15.0",
+    "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
     "pdfjs-dist": "^5.4.296",
     "react": "^18.2.0",
+    "react-calendar": "^6.0.0",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",
     "tesseract.js": "^6.0.1"

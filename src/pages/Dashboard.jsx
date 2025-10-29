@@ -1,13 +1,16 @@
 import { useAuth } from '@hooks/useAuth.js'
 import { useNavigate } from 'react-router-dom'
 import { useFileStats } from '@hooks/useFileStats.js'
+import { useReminders } from '@hooks/useReminders.js'
 import { useEffect } from 'react'
+import TodayReminders from '../components/Reminders/TodayReminders.jsx'
 import './Dashboard.css'
 
 const Dashboard = () => {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { totalRecords, loading, refreshStats } = useFileStats()
+  const { todayReminders, loading: remindersLoading } = useReminders()
 
   // Refresh stats when component mounts or becomes visible
   useEffect(() => {
@@ -45,11 +48,13 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="dashboard__stat-card">
+        <div className="dashboard__stat-card" onClick={() => navigate('/reminders')} style={{ cursor: 'pointer' }}>
           <div className="dashboard__stat-icon">📅</div>
           <div className="dashboard__stat-content">
-            <h3>Upcoming Reminders</h3>
-            <p className="dashboard__stat-value">0</p>
+            <h3>Today's Reminders</h3>
+            <p className="dashboard__stat-value">
+              {remindersLoading ? '...' : todayReminders.length}
+            </p>
           </div>
         </div>
 
@@ -71,6 +76,15 @@ const Dashboard = () => {
       </div>
 
       <div className="dashboard__content-grid">
+        {/* Today's Reminders Widget */}
+        {todayReminders.length > 0 && (
+          <TodayReminders
+            reminders={todayReminders}
+            loading={remindersLoading}
+            onViewAll={() => navigate('/reminders')}
+          />
+        )}
+
         <div className="dashboard__quick-actions">
           <h2>Quick Actions</h2>
           <div className="dashboard__action-list">
@@ -82,7 +96,11 @@ const Dashboard = () => {
               <span className="dashboard__action-icon">📤</span>
               <span>Upload Record</span>
             </button>
-            <button className="dashboard__action-btn">
+            <button 
+              className="dashboard__action-btn"
+              onClick={() => navigate('/reminders')}
+              aria-label="Set Reminder"
+            >
               <span className="dashboard__action-icon">⏰</span>
               <span>Set Reminder</span>
             </button>

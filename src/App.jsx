@@ -3,6 +3,7 @@ import AuthGuard from '@components/Auth/AuthGuard.jsx'
 import Layout from '@components/Layout/Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import MedicalRecords from './pages/MedicalRecords.jsx'
+import Reminders from './pages/Reminders.jsx'
 import './App.css'
 
 function App() {
@@ -19,8 +20,10 @@ function App() {
             <Route path="/records" element={<MedicalRecords />} />
             <Route path="/records/*" element={<Navigate to="/records" replace />} />
             
+            {/* Reminders - Stage 6A */}
+            <Route path="/reminders" element={<Reminders />} />
+            
             {/* Placeholder routes for future stages */}
-            <Route path="/reminders" element={<ComingSoonPage title="Reminders" stage="6" />} />
             <Route path="/emergency" element={<ComingSoonPage title="Emergency SOS" stage="7" />} />
             <Route path="/blockchain" element={<ComingSoonPage title="Blockchain" stage="5" />} />
             <Route path="/settings" element={<ComingSoonPage title="Settings" stage="8" />} />

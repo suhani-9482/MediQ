@@ -1,0 +1,296 @@
+.prescription-import-modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.prescription-import-modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.prescription-import-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.prescription-import-modal__header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.prescription-import-modal__close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prescription-import-modal__close:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.prescription-import-modal__content {
+  padding: 24px;
+}
+
+/* Upload Section */
+.prescription-import-modal__upload {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 60px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.prescription-import-modal__upload:hover {
+  border-color: #2563eb;
+  background: #f0f9ff;
+}
+
+.prescription-import-modal__upload-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.prescription-import-modal__upload h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.prescription-import-modal__upload p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Preview Section */
+.prescription-import-modal__preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prescription-import-modal__preview {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.prescription-import-modal__preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.prescription-import-modal__actions {
+  display: flex;
+  gap: 12px;
+}
+
+.prescription-import-modal__btn {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.prescription-import-modal__btn--primary {
+  background: #2563eb;
+  color: white;
+}
+
+.prescription-import-modal__btn--primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.prescription-import-modal__btn--primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.prescription-import-modal__btn--secondary {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.prescription-import-modal__btn--secondary:hover {
+  background: #e5e7eb;
+}
+
+/* Progress */
+.prescription-import-modal__progress {
+  margin-top: 20px;
+}
+
+.prescription-import-modal__progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.prescription-import-modal__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  transition: width 0.3s ease;
+}
+
+.prescription-import-modal__progress-text {
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+  margin: 0;
+}
+
+/* Results Section */
+.prescription-import-modal__results {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.prescription-import-modal__results h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.prescription-import-modal__extracted {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prescription-import-modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prescription-import-modal__field strong {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.prescription-import-modal__list {
+  margin: 4px 0 0 0;
+  padding-left: 20px;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.prescription-import-modal__list li {
+  margin-bottom: 4px;
+}
+
+/* Suggestions */
+.prescription-import-modal__suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prescription-import-modal__suggestion {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.prescription-import-modal__suggestion-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e40af;
+  margin-bottom: 8px;
+}
+
+.prescription-import-modal__suggestion-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: #374151;
+}
+
+.prescription-import-modal__suggestion-details span {
+  background: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.prescription-import-modal__import-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .prescription-import-modal {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .prescription-import-modal__header,
+  .prescription-import-modal__content {
+    padding: 16px;
+  }
+
+  .prescription-import-modal__upload {
+    padding: 40px 20px;
+  }
+
+  .prescription-import-modal__actions,
+  .prescription-import-modal__import-actions {
+    flex-direction: column;
+  }
+
+  .prescription-import-modal__btn {
+    width: 100%;
+  }
+}
+

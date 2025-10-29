@@ -2,7 +2,7 @@
 
 A secure, decentralized medical records management system built with React, Firebase, and blockchain technology.
 
-## 🎯 Current Status: Stage 3 Complete ✅
+## 🎯 Current Status: Stage 6B Complete ✅
 
 **Stage 1 - Authentication & Foundation** ✅
 - ✅ Email-link (passwordless) authentication
@@ -26,6 +26,40 @@ A secure, decentralized medical records management system built with React, Fire
 - ✅ Date detection algorithms
 - ✅ Basic keyword extraction
 - ✅ Text search functionality
+
+**Stage 4 - IPFS Integration** ✅
+- ✅ Web3.Storage integration
+- ✅ Decentralized file backup
+- ✅ CID tracking and storage
+- ✅ Multiple gateway support
+
+**Stage 5 - Blockchain Anchoring** ✅
+- ✅ Ethereum Sepolia integration
+- ✅ MetaMask SDK integration
+- ✅ Smart contract deployment
+- ✅ Document hash anchoring
+- ✅ Transaction tracking
+
+**Stage 6A - Core Reminder System** ✅
+- ✅ Medication reminders with recurring schedules
+- ✅ Multiple reminder types (medication, appointment, lab test, refill)
+- ✅ Quick actions (mark as taken, snooze, skip)
+- ✅ Today's reminders dashboard widget
+- ✅ Adherence tracking (7-day statistics)
+- ✅ Browser notifications
+- ✅ Color-coded categories
+- ✅ Filtering by type
+
+**Stage 6B - Advanced Reminder Features** ✅
+- ✅ Calendar view (monthly/weekly) with visual reminder indicators
+- ✅ Appointment & lab test reminders with location and doctor info
+- ✅ Adherence statistics & reports with interactive charts (Chart.js)
+- ✅ OCR prescription import (auto-extract medications from images)
+- ✅ Smart scheduling templates (8 built-in templates)
+- ✅ Quiet hours & comprehensive notification preferences
+- ✅ Export reports to PDF (reminder list, adherence report, calendar)
+- ✅ Streak tracking and achievements
+- ✅ User preferences management
 
 ## 🚀 Quick Start
 

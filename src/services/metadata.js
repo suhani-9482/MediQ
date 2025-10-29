@@ -294,3 +294,170 @@ export const getFileByIPFSCID = async (cid) => {
   }
 }
 
+/**
+ * ============================================
+ * BLOCKCHAIN-RELATED METADATA FUNCTIONS
+ * ============================================
+ */
+
+/**
+ * Update blockchain anchoring status for a file
+ * @param {string} filePath - File path
+ * @param {string} status - Anchoring status (none, pending, anchored, failed)
+ * @param {object} blockchainData - Blockchain data (hash, txHash, blockNumber, etc)
+ * @returns {Promise<{success: boolean, data?: object, error?: string}>}
+ */
+export const updateBlockchainStatus = async (filePath, status, blockchainData = {}) => {
+  try {
+    const updates = {
+      blockchain_status: status,
+      ...(blockchainData.hash && { blockchain_hash: blockchainData.hash }),
+      ...(blockchainData.txHash && { blockchain_tx_hash: blockchainData.txHash }),
+      ...(blockchainData.blockNumber && { blockchain_block_number: blockchainData.blockNumber }),
+      ...(blockchainData.gasUsed && { blockchain_gas_used: blockchainData.gasUsed }),
+      ...(blockchainData.contractAddress && { blockchain_contract_address: blockchainData.contractAddress }),
+      ...(blockchainData.anchoredBy && { blockchain_anchored_by: blockchainData.anchoredBy }),
+      ...(blockchainData.error && { blockchain_error: blockchainData.error }),
+      ...(status === 'anchored' && { blockchain_timestamp: new Date().toISOString() })
+    }
+    
+    const { data, error } = await supabase
+      .from('file_metadata')
+      .update(updates)
+      .eq('file_path', filePath)
+      .select()
+    
+    if (error) throw error
+    
+    console.log('✅ Blockchain status updated:', status)
+    return { success: true, data: data[0] }
+  } catch (error) {
+    console.error('❌ Blockchain status update error:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+/**
+ * Get files by blockchain status
+ * @param {string} userId - User ID
+ * @param {string} status - Blockchain status (none, pending, anchored, failed)
+ * @returns {Promise<{success: boolean, data?: array, error?: string}>}
+ */
+export const getFilesByBlockchainStatus = async (userId, status) => {
+  try {
+    const { data, error } = await supabase
+      .from('file_metadata')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('blockchain_status', status)
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    
+    return { success: true, data: data || [] }
+  } catch (error) {
+    console.error('❌ Fetch by blockchain status error:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+/**
+ * Get blockchain statistics for user
+ * @param {string} userId - User ID
+ * @returns {Promise<{success: boolean, stats?: object, error?: string}>}
+ */
+export const getBlockchainStats = async (userId) => {
+  try {
+    const { data, error } = await supabase
+      .from('file_metadata')
+      .select('blockchain_status')
+      .eq('user_id', userId)
+    
+    if (error) throw error
+    
+    const stats = {
+      total: data.length,
+      anchored: data.filter(f => f.blockchain_status === 'anchored').length,
+      pending: data.filter(f => f.blockchain_status === 'pending').length,
+      failed: data.filter(f => f.blockchain_status === 'failed').length,
+      none: data.filter(f => f.blockchain_status === 'none' || !f.blockchain_status).length
+    }
+    
+    stats.anchoredPercentage = stats.total > 0 
+      ? Math.round((stats.anchored / stats.total) * 100) 
+      : 0
+    
+    return { success: true, stats }
+  } catch (error) {
+    console.error('❌ Blockchain stats error:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+/**
+ * Get all files not anchored on blockchain
+ * @param {string} userId - User ID
+ * @returns {Promise<{success: boolean, data?: array, error?: string}>}
+ */
+export const getFilesNotAnchored = async (userId) => {
+  try {
+    const { data, error } = await supabase
+      .from('file_metadata')
+      .select('*')
+      .eq('user_id', userId)
+      .or('blockchain_status.eq.none,blockchain_status.eq.failed,blockchain_status.is.null')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    
+    return { success: true, data: data || [] }
+  } catch (error) {
+    console.error('❌ Fetch not anchored error:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+/**
+ * Get file by blockchain transaction hash
+ * @param {string} txHash - Transaction hash
+ * @returns {Promise<{success: boolean, data?: object, error?: string}>}
+ */
+export const getFileByTxHash = async (txHash) => {
+  try {
+    const { data, error } = await supabase
+      .from('file_metadata')
+      .select('*')
+      .eq('blockchain_tx_hash', txHash)
+      .single()
+    
+    if (error) throw error
+    
+    return { success: true, data }
+  } catch (error) {
+    console.error('❌ Fetch by TX hash error:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+/**
+ * Get file by blockchain hash
+ * @param {string} blockchainHash - Document hash on blockchain
+ * @returns {Promise<{success: boolean, data?: object, error?: string}>}
+ */
+export const getFileByBlockchainHash = async (blockchainHash) => {
+  try {
+    const { data, error } = await supabase
+      .from('file_metadata')
+      .select('*')
+      .eq('blockchain_hash', blockchainHash)
+      .single()
+    
+    if (error) throw error
+    
+    return { success: true, data }
+  } catch (error) {
+    console.error('❌ Fetch by blockchain hash error:', error)
+    return { success: false, error: error.message }
+  }
+}
+
