@@ -1,5 +1,5 @@
-import jsPDF from 'jspdf'
-import 'jspdf-autotable'
+import { jsPDF } from 'jspdf'
+import autoTable from 'jspdf-autotable'
 import { formatReminderTime } from './reminders.js'
 
 /**
@@ -33,7 +33,7 @@ export const exportReminderListPDF = (reminders, userName = 'User') => {
   ])
   
   // Table
-  doc.autoTable({
+  autoTable(doc, {
     startY: 45,
     head: [['Reminder', 'Medication', 'Dosage', 'Time', 'Frequency', 'Status']],
     body: tableData,
@@ -112,7 +112,7 @@ export const exportAdherenceReportPDF = (stats, logs, userName = 'User', days = 
     ['Snoozed', stats.snoozed]
   ]
   
-  doc.autoTable({
+  autoTable(doc, {
     startY: 60,
     body: summaryData,
     theme: 'plain',
@@ -139,7 +139,7 @@ export const exportAdherenceReportPDF = (stats, logs, userName = 'User', days = 
       log.action_time ? new Date(log.action_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '-'
     ])
     
-    doc.autoTable({
+    autoTable(doc, {
       startY: finalY + 20,
       head: [['Date', 'Scheduled', 'Action', 'Actual Time']],
       body: activityData,
@@ -267,7 +267,7 @@ export const exportMonthlyCalendarPDF = (reminders, month, userName = 'User') =>
   }
   
   // Draw calendar
-  doc.autoTable({
+  autoTable(doc, {
     startY: 35,
     head: [dayNames],
     body: calendarData,

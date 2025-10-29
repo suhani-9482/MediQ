@@ -57,8 +57,11 @@ const AdherenceStats = ({ logs, userName, days = 30 }) => {
 
   useEffect(() => {
     calculateStats()
-    prepareChartData()
   }, [logs, days])
+
+  useEffect(() => {
+    prepareChartData()
+  }, [stats, logs, days])
 
   const calculateStats = () => {
     if (!logs || logs.length === 0) {

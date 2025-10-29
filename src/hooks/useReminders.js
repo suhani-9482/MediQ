@@ -43,7 +43,10 @@ export const useReminders = () => {
       }
 
       if (statsResult.success) {
-        setAdherenceStats(statsResult.stats)
+        setAdherenceStats({
+          ...statsResult.stats,
+          logs: statsResult.logs
+        })
       }
     } catch (err) {
       console.error('Error fetching reminders:', err)

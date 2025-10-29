@@ -36,6 +36,8 @@ const Reminders = () => {
   }
 
   const handleEditReminder = (reminder) => {
+    console.log('🔍 Edit reminder called with:', reminder)
+    console.log('🔍 Reminder ID:', reminder?.id)
     setEditingReminder(reminder)
     setShowAddModal(true)
   }

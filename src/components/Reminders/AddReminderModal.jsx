@@ -113,6 +113,11 @@ const AddReminderModal = ({ isOpen, onClose, onSuccess, editReminder = null, use
 
       let result
       if (editReminder) {
+        console.log('📝 Editing reminder:', editReminder)
+        console.log('📝 Reminder ID:', editReminder.id)
+        if (!editReminder.id) {
+          throw new Error('Reminder ID is missing')
+        }
         result = await updateReminder(editReminder.id, reminderData)
       } else {
         result = await createReminder(reminderData)

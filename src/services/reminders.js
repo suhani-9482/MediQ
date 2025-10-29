@@ -65,6 +65,12 @@ export const getReminders = async (userId, filters = {}) => {
 
     if (error) throw error
 
+    // Debug: Check if id exists in returned data
+    if (data && data.length > 0) {
+      console.log('📋 First reminder from DB:', data[0])
+      console.log('📋 Has ID?', 'id' in data[0], data[0].id)
+    }
+
     return { success: true, data: data || [] }
   } catch (error) {
     console.error('❌ Get reminders error:', error)
@@ -116,12 +122,29 @@ export const getTodayReminders = async (userId) => {
  */
 export const updateReminder = async (reminderId, updates) => {
   try {
+    // Convert camelCase to snake_case for database
+    const dbUpdates = {
+      ...(updates.title && { title: updates.title }),
+      ...(updates.description !== undefined && { description: updates.description }),
+      ...(updates.reminderType && { reminder_type: updates.reminderType }),
+      ...(updates.medicationName !== undefined && { medication_name: updates.medicationName }),
+      ...(updates.dosage !== undefined && { dosage: updates.dosage }),
+      ...(updates.instructions !== undefined && { instructions: updates.instructions }),
+      ...(updates.startDate && { start_date: updates.startDate }),
+      ...(updates.endDate !== undefined && { end_date: updates.endDate }),
+      ...(updates.reminderTime && { reminder_time: updates.reminderTime }),
+      ...(updates.frequency && { frequency: updates.frequency }),
+      ...(updates.frequencyDetails !== undefined && { frequency_details: updates.frequencyDetails }),
+      ...(updates.notificationEnabled !== undefined && { notification_enabled: updates.notificationEnabled }),
+      ...(updates.notificationLeadTime !== undefined && { notification_lead_time: updates.notificationLeadTime }),
+      ...(updates.isActive !== undefined && { is_active: updates.isActive }),
+      ...(updates.color && { color: updates.color }),
+      updated_at: new Date().toISOString()
+    }
+    
     const { data, error } = await supabase
       .from('reminders')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString()
-      })
+      .update(dbUpdates)
       .eq('id', reminderId)
       .select()
 
@@ -226,7 +249,7 @@ export const getAdherenceStats = async (userId, days = 30) => {
 
     const { data, error } = await supabase
       .from('reminder_logs')
-      .select('action')
+      .select('*')  // Changed from 'action' to '*' to get all fields
       .eq('user_id', userId)
       .gte('scheduled_time', startDate.toISOString())
 
@@ -251,7 +274,8 @@ export const getAdherenceStats = async (userId, days = 30) => {
         snoozed,
         adherenceRate,
         period: days
-      }
+      },
+      logs: logs  // Added: return the logs as well
     }
   } catch (error) {
     console.error('❌ Get adherence stats error:', error)

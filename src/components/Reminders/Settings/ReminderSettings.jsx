@@ -50,7 +50,7 @@ const ReminderSettings = ({ isOpen, onClose }) => {
 
     setSaving(true)
     
-    const result = await saveUserPreferences(user.id, preferences)
+    const result = await saveUserPreferences(user.uid || user.id, preferences)
     
     if (result.success) {
       alert('Settings saved successfully! ✅')
