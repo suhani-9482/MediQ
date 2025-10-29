@@ -1,58 +1,88 @@
 import { extractTextFromImage } from './ocr.js'
+import { extractTextFromPDF } from './pdfExtractor.js'
 import { autoPreprocess } from './imagePreprocessor.js'
 
 /**
- * Extract medication information from prescription image
- * @param {File} imageFile - Prescription image
+ * Extract medication information from prescription image or PDF
+ * @param {File} file - Prescription image or PDF
  * @param {function} onProgress - Progress callback
  * @returns {Promise<{success: boolean, data?: object, error?: string}>}
  */
-export const extractPrescriptionData = async (imageFile, onProgress = null) => {
+export const extractPrescriptionData = async (file, onProgress = null) => {
   try {
-    console.log('📋 Starting prescription OCR...')
+    console.log('📋 Starting prescription processing...')
     
-    if (onProgress) onProgress({ stage: 'preprocessing', progress: 10 })
+    const isPDF = file.type === 'application/pdf'
+    let extractedText = ''
+    let confidence = 0
     
-    // Preprocess image
-    const processedImage = await autoPreprocess(imageFile)
-    
-    if (onProgress) onProgress({ stage: 'extracting', progress: 30 })
-    
-    // Extract text
-    const ocrResult = await extractTextFromImage(processedImage, {
-      languages: ['eng'],
-      psm: 6, // Assume uniform block of text
-      oem: 3,
-      onProgress: (progress) => {
+    if (isPDF) {
+      // Process PDF
+      console.log('📄 Processing PDF prescription...')
+      if (onProgress) onProgress({ stage: 'extracting', progress: 20 })
+      
+      const pdfResult = await extractTextFromPDF(file, (progress) => {
         if (onProgress) {
-          onProgress({ stage: 'extracting', progress: 30 + (progress * 0.5) })
+          onProgress({ stage: 'extracting', progress: 20 + (progress * 0.6) })
         }
+      })
+      
+      if (!pdfResult.success) {
+        throw new Error(pdfResult.error || 'Failed to extract text from PDF')
       }
-    })
-    
-    if (!ocrResult.success) {
-      throw new Error(ocrResult.error)
+      
+      extractedText = pdfResult.text
+      confidence = 95 // PDFs have high confidence since text is directly extracted
+      
+    } else {
+      // Process Image
+      console.log('🖼️ Processing image prescription...')
+      if (onProgress) onProgress({ stage: 'preprocessing', progress: 10 })
+      
+      // Preprocess image
+      const processedImage = await autoPreprocess(file)
+      
+      if (onProgress) onProgress({ stage: 'extracting', progress: 30 })
+      
+      // Extract text with OCR
+      const ocrResult = await extractTextFromImage(processedImage, {
+        languages: ['eng'],
+        psm: 6, // Assume uniform block of text
+        oem: 3,
+        onProgress: (progress) => {
+          if (onProgress) {
+            onProgress({ stage: 'extracting', progress: 30 + (progress * 0.5) })
+          }
+        }
+      })
+      
+      if (!ocrResult.success) {
+        throw new Error(ocrResult.error)
+      }
+      
+      extractedText = ocrResult.text
+      confidence = ocrResult.confidence
     }
     
-    if (onProgress) onProgress({ stage: 'analyzing', progress: 80 })
+    if (onProgress) onProgress({ stage: 'analyzing', progress: 85 })
     
     // Parse extracted text
-    const parsedData = parsePrescriptionText(ocrResult.text)
+    const parsedData = parsePrescriptionText(extractedText)
     
     if (onProgress) onProgress({ stage: 'complete', progress: 100 })
     
-    console.log('✅ Prescription OCR complete')
+    console.log('✅ Prescription processing complete')
     
     return {
       success: true,
       data: {
-        extractedText: ocrResult.text,
+        extractedText,
         ...parsedData,
-        confidence: ocrResult.confidence
+        confidence
       }
     }
   } catch (error) {
-    console.error('❌ Prescription OCR error:', error)
+    console.error('❌ Prescription processing error:', error)
     return {
       success: false,
       error: error.message || 'Failed to process prescription'

@@ -16,28 +16,47 @@ const PrescriptionImportModal = ({ isOpen, onClose, onImportComplete }) => {
     const selectedFile = e.target.files?.[0]
     if (!selectedFile) return
 
-    if (!selectedFile.type.startsWith('image/')) {
-      alert('Please select an image file')
+    // Accept both images and PDFs
+    const isImage = selectedFile.type.startsWith('image/')
+    const isPDF = selectedFile.type === 'application/pdf'
+    
+    if (!isImage && !isPDF) {
+      alert('Please select an image or PDF file')
       return
     }
 
     setFile(selectedFile)
     
-    // Create preview
-    const reader = new FileReader()
-    reader.onload = (e) => setPreview(e.target.result)
-    reader.readAsDataURL(selectedFile)
+    // Create preview (only for images)
+    if (isImage) {
+      const reader = new FileReader()
+      reader.onload = (e) => setPreview(e.target.result)
+      reader.readAsDataURL(selectedFile)
+    } else {
+      // For PDFs, show a generic PDF icon/placeholder
+      setPreview('PDF')
+    }
   }
 
   const handleDrop = (e) => {
     e.preventDefault()
     const droppedFile = e.dataTransfer.files[0]
     
-    if (droppedFile && droppedFile.type.startsWith('image/')) {
-      setFile(droppedFile)
-      const reader = new FileReader()
-      reader.onload = (e) => setPreview(e.target.result)
-      reader.readAsDataURL(droppedFile)
+    if (droppedFile) {
+      const isImage = droppedFile.type.startsWith('image/')
+      const isPDF = droppedFile.type === 'application/pdf'
+      
+      if (isImage || isPDF) {
+        setFile(droppedFile)
+        
+        if (isImage) {
+          const reader = new FileReader()
+          reader.onload = (e) => setPreview(e.target.result)
+          reader.readAsDataURL(droppedFile)
+        } else {
+          setPreview('PDF')
+        }
+      }
     }
   }
 
@@ -129,7 +148,7 @@ const PrescriptionImportModal = ({ isOpen, onClose, onImportComplete }) => {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/*,application/pdf"
                     onChange={handleFileSelect}
                     style={{ display: 'none' }}
                   />
@@ -138,7 +157,15 @@ const PrescriptionImportModal = ({ isOpen, onClose, onImportComplete }) => {
                 <div className="prescription-import-modal__preview-section">
                   {preview && (
                     <div className="prescription-import-modal__preview">
-                      <img src={preview} alt="Prescription preview" />
+                      {preview === 'PDF' ? (
+                        <div className="prescription-import-modal__pdf-preview">
+                          <div className="prescription-import-modal__pdf-icon">📄</div>
+                          <p>{file?.name}</p>
+                          <span className="prescription-import-modal__file-type">PDF Document</span>
+                        </div>
+                      ) : (
+                        <img src={preview} alt="Prescription preview" />
+                      )}
                     </div>
                   )}
                   
@@ -150,7 +177,7 @@ const PrescriptionImportModal = ({ isOpen, onClose, onImportComplete }) => {
                       }}
                       className="prescription-import-modal__btn prescription-import-modal__btn--secondary"
                     >
-                      Choose Different Image
+                      Choose Different File
                     </button>
                     <button
                       onClick={handleProcessPrescription}
